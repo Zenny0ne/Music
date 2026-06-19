@@ -27,16 +27,7 @@ public class PlaylistService
         await _playlists.InsertOneAsync(playlist);
     }
 
-    public async Task<int> GetNextPlayListId()
-    {
-        var lastPlaylist = await _songs.Find(Builders<Song>.Filter.Empty)
-            .SortByDescending(s => s.Id)
-            .FirstOrDefaultAsync();
-        
-        return (lastPlaylist?.Id ?? 0) + 1;
-    }
-
-    public async Task<Playlist> GetPlaylistById(int id)
+    public async Task<Playlist> GetPlaylistById(string id)
     {
         return await _playlists.Find(p => p.Id == id).FirstOrDefaultAsync();
     }

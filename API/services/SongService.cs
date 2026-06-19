@@ -35,7 +35,7 @@ public class SongService
         return await _songs.Find(Builders<Song>.Filter.Empty).ToListAsync();
     }
 
-    public async Task<Song> GetSongById(int id)
+    public async Task<Song> GetSongById(string id)
     {
         return await _songs.Find(s => s.Id == id).FirstOrDefaultAsync();
     }
@@ -52,15 +52,6 @@ public class SongService
     public async Task CreateSongAsync(Song song)
     {
         await _songs.InsertOneAsync(song);
-    }
-
-    public async Task<int> GetNextSongId()
-    {
-        var lastSong = await _songs.Find(Builders<Song>.Filter.Empty)
-            .SortByDescending(s => s.Id)
-            .FirstOrDefaultAsync();
-        
-        return (lastSong?.Id ?? 0) + 1;
     }
 
 }

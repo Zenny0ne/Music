@@ -17,21 +17,12 @@ public class AlbumService
         _albums = database.GetCollection<Album>(settings.AlbumsCollectionName);
     }
 
-    public async Task<int> GetNextAlbumId()
-    {
-        var lastAlbum = await _albums.Find(Builders<Album>.Filter.Empty)
-            .SortByDescending(s => s.Id)
-            .FirstOrDefaultAsync();
-        
-        return (lastAlbum?.Id ?? 0) + 1;
-    }
-
     public async Task CreateAlbumAsync(Album album)
     {
         await _albums.InsertOneAsync(album);
     }
 
-    public async Task<Album?> GetAlbumById(int id)
+    public async Task<Album?> GetAlbumById(string id)
     {
         return await _albums.Find(a => a.Id == id).FirstOrDefaultAsync();
     }

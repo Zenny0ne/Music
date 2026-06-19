@@ -58,11 +58,8 @@ public static class SongEndpoints
             songAudioPath = $"/uploads/audio/{songName}";
             var physicalAudioPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads", "audio", songName);
 
-            var nextSongId = await songService.GetNextSongId();
-
             var song = new Song
             {
-                Id = nextSongId,
                 Title = songDto.Title,
                 ArtistId = artistId,
                 Image = songImagePath,
@@ -108,7 +105,7 @@ public static class SongEndpoints
             return Results.Ok(Response<List<Song>>.Success(songs, "All songs retrieved"));
         });
 
-        group.MapPut("/update", async ([FromServices] ArtistService artistService, [FromServices] SongService songService, [FromForm] UpdateSongDto songDto, IFormFile? songImage, IFormFile? audioFile, HttpContext context) =>
+        group.MapPut("/update/{songId}", async ([FromServices] ArtistService artistService, [FromServices] SongService songService, [FromForm] UpdateSongDto songDto, IFormFile? songImage, IFormFile? audioFile, HttpContext context, string songId) =>
         {
             if(songDto is null)
             {
@@ -131,7 +128,7 @@ public static class SongEndpoints
                 return Results.Unauthorized();
             }
 
-            var song = await songService.GetSongById(songDto.Id);
+            var song = await songService.GetSongById(songId);
 
             if(!string.IsNullOrWhiteSpace(songDto.Title)){
                 song.Title = songDto.Title;
@@ -164,7 +161,7 @@ public static class SongEndpoints
 
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapDelete("/delete/{songId}", async ([FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, int songId) =>
+        group.MapDelete("/delete/{songId}", async ([FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, string songId) =>
         {
             var artistId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(artistId))

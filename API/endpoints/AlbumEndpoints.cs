@@ -53,10 +53,8 @@ public static class AlbumEndPoints
                 }
             }
 
-            var nextAlbumId = await albumService.GetNextAlbumId();
             var album = new Album
             {
-                Id = nextAlbumId,
                 Title = dto.Title,
                 ArtistId = artistId,
                 ReleaseDate = DateTime.UtcNow,
@@ -66,7 +64,6 @@ public static class AlbumEndPoints
             };
 
             var createdSongs = new List<Song>();
-            var nextSongId = await songService.GetNextSongId();
 
             if (zipFile is not null)
             {
@@ -91,7 +88,6 @@ public static class AlbumEndPoints
 
                     var song = new Song
                     {
-                        Id = nextSongId++,
                         Title = Path.GetFileNameWithoutExtension(entry.Name),
                         ArtistId = artistId,
                         AlbumId = album.Id,
@@ -118,7 +114,7 @@ public static class AlbumEndPoints
             return Results.Ok(Response<Album>.Success(album, "Album created successfully"));
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapPut("/update/albumId", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromForm] UpdateAlbumDto dto, HttpContext context, int albumId) =>
+        group.MapPut("/update/albumId", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromForm] UpdateAlbumDto dto, HttpContext context, string albumId) =>
         {
             var artistId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(artistId))
@@ -157,7 +153,7 @@ public static class AlbumEndPoints
 
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapPut("/update/add/{albumId}/{songId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, int albumId, int songId) =>
+        group.MapPut("/update/add/{albumId}/{songId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, string albumId, string songId) =>
         {
             var artistId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(artistId))
@@ -199,7 +195,7 @@ public static class AlbumEndPoints
 
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapPut("/update/remove/{albumId}/{songId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, int albumId, int songId) =>
+        group.MapPut("/update/remove/{albumId}/{songId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, [FromServices] SongService songService, HttpContext context, string albumId, string songId) =>
         {
             var artistId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(artistId))
@@ -231,7 +227,7 @@ public static class AlbumEndPoints
             return Results.Ok(Response<Album>.Success(album,"Song removed successfully"));  
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapDelete("/album/delete/{albumId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, HttpContext context, int albumId) =>
+        group.MapDelete("/album/delete/{albumId}", async ([FromServices] AlbumService albumService, [FromServices] ArtistService artistService, HttpContext context, string albumId) =>
         {
             var artistId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(artistId))

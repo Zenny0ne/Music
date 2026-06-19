@@ -170,7 +170,7 @@ public static class UserEndPoints
             return Results.Ok(Response<string>.Success("User deleted successfully"));
         }).RequireAuthorization();
 
-        group.MapPut("/favouritesong/{songId}", async ([FromServices] UserService userService, [FromServices] PlaylistService playlistService, [FromServices] SongService songService, HttpContext context, int songId) =>
+        group.MapPut("/favouritesong/{songId}", async ([FromServices] UserService userService, [FromServices] PlaylistService playlistService, [FromServices] SongService songService, HttpContext context, string songId) =>
         {
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -192,10 +192,8 @@ public static class UserEndPoints
 
             if(user.FavoriteSongs is null)
             {
-                var nextPlaylist = await playlistService.GetNextPlayListId();
                 user.FavoriteSongs = new Playlist
                 {
-                    Id = nextPlaylist,
                     Name = "Favourite songs",
                     UserId = userId,
                     Songs = new List<Song>(),
@@ -212,7 +210,7 @@ public static class UserEndPoints
 
         }).DisableAntiforgery().RequireAuthorization();
 
-        group.MapPost("/favouritealbum/{albumId}", async([FromServices] UserService userService, [FromServices] AlbumService albumService, HttpContext context, int albumId) =>
+        group.MapPost("/favouritealbum/{albumId}", async([FromServices] UserService userService, [FromServices] AlbumService albumService, HttpContext context, string albumId) =>
         {
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
