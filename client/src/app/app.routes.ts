@@ -13,13 +13,13 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
-        path: 'registerUser',
-        loadComponent: () => import('./register-user/register-user').then(m => m.RegisterUser),
+        path: 'register',
+        loadComponent: () => import('./register/register').then(m => m.Register),
         canActivate: [loginGuard]
     },
     {
-        path: 'registerArtist',
-        loadComponent: () => import('./register-artist/register-artist').then(m => m.RegisterArtist),
-        
-    }
+        path: 'login',
+        loadComponent: () => import('./login/login').then(m => m.Login),
+        canActivate: [loginGuard]
+    },
 ];

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { LeftBar } from '../components/left-bar/left-bar';
 import { CenterBar } from '../components/center-bar/center-bar';
 import { RightBar } from '../components/right-bar/right-bar';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-music',
-  imports: [LeftBar, CenterBar, RightBar],
+  imports: [LeftBar, CenterBar, RightBar, RouterLink],
   templateUrl: './music.html',
   styleUrl: './music.css',
 })
