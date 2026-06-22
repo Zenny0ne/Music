@@ -1,1 +1,39 @@
-<p>register works!</p>
+<form>
+  <div class="mb-3">
+    <label for="fullName" class="form-label">Nome completo</label>
+    <input type="text" class="form-control" id="fullName">
+  </div>
+
+  <div class="mb-3">
+    <label for="userName" class="form-label">Nome utente</label>
+    <input type="text" class="form-control" id="userName">
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Email </label>
+    <input type="email" class="form-control" id="email">
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" class="form-control" id="password">
+  </div>
+
+  <div class="mb-3">
+    <label for="profileImage" class="form-label">Immagine profilo</label>
+    <input
+      type="file"
+      class="form-control"
+      id="profileImage"
+      accept="image/*">
+  </div>
+
+  <input
+  type="checkbox"
+  class="form-check-input"
+  formControlName="isArtist">
+
+  <button type="submit" class="btn btn-primary">
+    Registrati
+  </button>
+</form>
