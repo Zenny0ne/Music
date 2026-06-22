@@ -11,6 +11,6 @@ import { ArtistService } from '../services/artist.service';
 })
 export class Register {
   
-
+  
 
 }

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Music } from './music/music';
-import { loginGuard } from './components/guards/login.guards';
+import { Register } from './register/register';
+import { Login } from './login/login';
 
 export const routes: Routes = [
     {
@@ -8,18 +9,16 @@ export const routes: Routes = [
         component:Music
     },
     {
-        path: '**',
-        redirectTo: 'music',
-        pathMatch: 'full'
-    },
-    {
         path: 'register',
-        loadComponent: () => import('./register/register').then(m => m.Register),
-        canActivate: [loginGuard]
+        component: Register
     },
     {
         path: 'login',
-        loadComponent: () => import('./login/login').then(m => m.Login),
-        canActivate: [loginGuard]
+        component: Login
+    },
+    {
+        path: '**',
+        redirectTo: 'music',
+        pathMatch: 'full'
     },
 ];
